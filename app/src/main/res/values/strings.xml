@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Bit and Pizzas</string>
+    <string name="main_activity_name">@string/app_name</string>
+    <string name="title_order_activity">Order Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Navigations</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_item_1">Pizzas</string>
+    <string name="menu_item_2">Burgers</string>
+    <string name="menu_item_3">Salads</string>
+    <string name="menu_item_4">Drinks</string>
+    <string name="action_share">Share_Content</string>
+
+    <string name="scr_pizza_title">Your choose: Pizzaaa!!!!</string>
+    <string name="scr_burgers_title">Your choose: Burgers!!!</string>
+    <string name="scr_salads_title">Your choose: Salads!!!</string>
+    <string name="scr_drinks_title">Your choose: Drinks!!!</string>
+
+    <string-array name="pizza_names">
+        <item>Margherita</item>
+        <item>Quattro_Stagioni</item>
+        <item>Hawaii</item>
+        <item>Italian</item>
+        <item>Ole_ole</item>
+        <item>Funghi</item>
+        <item>Peperoni</item>
+        <item>Capricciosa</item>
+    </string-array>
+
+    <string-array name="burgers_names">
+        <item>Hamburger</item>
+        <item>Cheeseburger</item>
+        <item>Big Mac</item>
+        <item>Bacon McDouble</item>
+        <item>Double Cheeseburger</item>
+        <item>Triple Cheeseburger</item>
+        <item>Quarter Pounder with Cheese</item>
+    </string-array>
+    <string-array name="salads_names">
+        <item>Side Salad</item>
+        <item>Southwest Grilled Chicken Salad</item>
+        <item>Southwest Buttermilk Crispy Chicken Salad</item>
+        <item>Bacon Ranch Grilled Chicken Salad</item>
+        <item>Bacon Ranch Salad with Buttermilk Crispy Chicken</item>
+    </string-array>
+
+    <string-array name="drinks_names">
+        <item>Coca-cola</item>
+        <item>Sprite</item>
+        <item>Clear water</item>
+        <item>Coffee</item>
+        <item>Hot chocolate</item>
+        <item>Fresh milk</item>
+        <item>Chocolate shake</item>
+        <item>Diet coke</item>
+        <item>Iced Tea</item>
+        <item>Hot Tea</item>
+        <item>Dr.Pepper</item>
+        <item>Orange Juice</item>
+        <item>Pepsi Cola</item>
+        <item>Beer "Holsten"</item>
+        <item>Beer "Baltica 7"</item>
+
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
