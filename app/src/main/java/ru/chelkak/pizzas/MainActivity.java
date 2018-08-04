@@ -1,6 +1,8 @@
 package ru.chelkak.pizzas;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,6 +35,11 @@ public class MainActivity extends AppCompatActivity
     private int currentPosition = 0;
     private final String TAG_ACTIVE_FRAGMENT = "visible_fragment";
 
+    private int[] products_id;
+
+    private String[] products_Names;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,19 @@ public class MainActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        products_Names = new String[]{
+                getResources().getString(R.string.menu_item_1),
+                getResources().getString(R.string.menu_item_2),
+                getResources().getString(R.string.menu_item_3),
+                getResources().getString(R.string.menu_item_4)};
+
+        products_id = new int[]{
+                R.array.pizza_names,
+                R.array.burgers_names,
+                R.array.salads_names,
+                R.array.drinks_names};
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,13 +90,51 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        // меню вкладок
+        //Attach the SectionsPagerAdapter to the ViewPager
+        SectionsPagerAdapter pagerAdapter =
+                new SectionsPagerAdapter(getSupportFragmentManager());
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(pagerAdapter);
+        //Attach the ViewPager to the TabLayout
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(pager);
+
+    }
+
+    //
+    private CharSequence getProductNames(int pos) {
+        return products_Names[pos];
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+        @Override
+        public int getCount() {
+            return 4;
+        }
+        @Override
+        public Fragment getItem(int position) {
+            if ((position>=0) && (position<4)) {
+                return getProductByPos(position);
+            }
+            return null;
+        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if ((position>=0) && (position<4)) {
+                return getProductNames(position);
+            }
+            return null;
+        }
     }
 
     @Override
     public void onBackPressed() {
 
         super.onBackPressed();
-
 
         //Toast.makeText(this,""+navigationView.getCheckedItem().getItemId(),Toast.LENGTH_SHORT).show();
         ProductsList fragment = (ProductsList) getSupportFragmentManager().findFragmentByTag(TAG_ACTIVE_FRAGMENT);
@@ -90,11 +149,9 @@ public class MainActivity extends AppCompatActivity
 
         setActionBarTitle();
 
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-
     }
 
     @Override
@@ -132,36 +189,43 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    // возвращает новый фрагмент с заданными параметрами
+    private Fragment getProductByPos(int num_of_prod) {
+       if ((num_of_prod>=0) && (num_of_prod<4)) {
+           Fragment fragment = new ProductsList();
+           Bundle args = new Bundle();
+           args.putInt(ProductsList.ID_LIST, products_id[num_of_prod]);
+           args.putInt(ProductsList.POSITION,num_of_prod+1);
+           args.putString(ProductsList.CATEGORY_NAME,products_Names[num_of_prod]);
+           fragment.setArguments(args);
+           return fragment;
+       }
+       Toast.makeText(this,"Error: fragment not created! pos="+num_of_prod,Toast.LENGTH_LONG)
+               .show();
+       return null;
+
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
+        int position=-1;
         int id = item.getItemId();
-        int position = -1;
-
-        Fragment fragment = new ProductsList();
-        Bundle args = new Bundle();
 
         if (id == R.id.menu_item_1) {
-            args.putInt(ProductsList.ID_LIST, R.array.pizza_names);
             position = 1;
         } else if (id == R.id.menu_item_2) {
-            args.putInt(ProductsList.ID_LIST, R.array.burgers_names);
             position = 2;
         } else if (id == R.id.menu_item_3) {
-            args.putInt(ProductsList.ID_LIST, R.array.salads_names);
             position = 3;
         } else if (id == R.id.menu_item_4) {
-            args.putInt(ProductsList.ID_LIST, R.array.drinks_names);
             position = 4;
         }
 
         if (position > 0) {
-            args.putInt(ProductsList.POSITION,position);
-            String s = item.toString();
-            args.putString(ProductsList.CATEGORY_NAME,s);
-            fragment.setArguments(args);
+            Fragment fragment = getProductByPos(position-1);
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment,TAG_ACTIVE_FRAGMENT)
@@ -172,35 +236,16 @@ public class MainActivity extends AppCompatActivity
             currentPosition = position;
             setActionBarTitle();
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void setActionBarTitle() {
-
-        switch (currentPosition) {
-            case 0: {
+    private void setActionBarTitle(){
+            if (currentPosition==0)
                 toolbar.setTitle(R.string.main_activity_name);
-                break;
-            }
-            case 1: {
-                toolbar.setTitle(R.string.scr_pizza_title);
-                break;
-            }
-            case 2: {
-                toolbar.setTitle(R.string.scr_burgers_title);
-                break;
-            }
-            case 3: {
-                toolbar.setTitle(R.string.scr_salads_title);
-                break;
-            }
-            case 4: {
-                toolbar.setTitle(R.string.scr_drinks_title);
-                break;
-            }
-        }
+            else
+                toolbar.setTitle(products_Names[currentPosition-1]);
+
     }
 
 
