@@ -1,7 +1,12 @@
 package ru.chelkak.pizzas;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,20 +21,28 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(bundle);
         this.setContentView(R.layout.activity_order);
 
-        String name = getIntent().getExtras().getString(ProductsList.NAME);
-        String category = getIntent().getExtras().getString(ProductsList.CATEGORY_NAME);
-        textView = findViewById(R.id.order_text1);
-        textView.setText(category + " " + name);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+        this.setTitleColor(R.color.colorPrimaryDark);
+        this.setTitle(R.string.title_order_activity);
 
-        getSupportActionBar().setTitle(category+" : " + name);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-
-
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
+    public void onClickDone(View view) {
+        CharSequence text = "Your order has been updated";
+        int duration = Snackbar.LENGTH_LONG;
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator),text,duration );
+        snackbar.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(OrderActivity.this, "Undone!",Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+        snackbar.show();
+    }
 }
